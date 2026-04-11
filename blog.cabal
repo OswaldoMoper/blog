@@ -5,6 +5,11 @@ version:        0.0.0
 license:        BSD3
 license-file:   LICENSE
 build-type:     Simple
+data-files: config/*.yml
+          , config/favicon.ico
+          , config/robots.txt
+          , config/routes.yesodroutes
+          , static/css/*.css
 
 flag dev
   description: Turn on development settings, like auto-reload templates.
