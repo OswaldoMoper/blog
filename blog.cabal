@@ -1,0 +1,134 @@
+cabal-version: 1.12
+
+name:           blog
+version:        0.0.0
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+
+flag dev
+  description: Turn on development settings, like auto-reload templates.
+  manual: False
+  default: False
+
+flag library-only
+  description: Build for use with "yesod devel"
+  manual: False
+  default: False
+
+library
+  exposed-modules:
+      Application
+      Foundation
+      Handler.Common
+      Handler.Home
+      Import
+      Import.NoFoundation
+      LucidTemplates.DefaultTemplate
+      LucidTemplates.HomeTemplate
+      Settings
+      Settings.StaticFiles
+      Types
+  other-modules:
+      Paths_blog
+  hs-source-dirs:
+      src
+  build-depends:
+      aeson
+    , base >=4.9.1.0 && <5
+    , blaze-html
+    , blaze-markup
+    , bytestring
+    , case-insensitive
+    , classy-prelude ==1.5.*
+    , classy-prelude-conduit ==1.5.*
+    , classy-prelude-yesod ==1.5.*
+    , conduit >=1.0 && <2.0
+    , containers
+    , data-default
+    , directory >=1.1 && <1.4
+    , fast-logger
+    , file-embed
+    , foreign-store
+    , hjsmin >=0.1 && <0.3
+    , http-client-tls ==0.3.*
+    , http-conduit ==2.3.*
+    , lucid
+    , monad-control >=0.3 && <1.1
+    , monad-logger ==0.3.*
+    , mtl
+    , safe
+    , shakespeare
+    , template-haskell
+    , text
+    , time
+    , unordered-containers
+    , vector
+    , wai
+    , wai-extra >=3.0 && <3.2
+    , wai-logger
+    , warp
+    , yaml ==0.11.*
+    , yesod ==1.6.*
+    , yesod-core ==1.6.*
+    , yesod-form >=1.6 && <1.8
+    , yesod-static ==1.6.*
+  default-language: Haskell2010
+  if (flag(dev)) || (flag(library-only))
+    ghc-options: -Wall -fwarn-tabs -O0
+    cpp-options: -DDEVELOPMENT
+  else
+    ghc-options: -Wall -fwarn-tabs -O2
+
+executable blog
+  main-is: main.hs
+  other-modules:
+      DevelMain
+      Paths_blog
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      aeson
+    , base >=4.9.1.0 && <5
+    , blaze-html
+    , blaze-markup
+    , blog
+    , bytestring
+    , case-insensitive
+    , classy-prelude ==1.5.*
+    , classy-prelude-conduit ==1.5.*
+    , classy-prelude-yesod ==1.5.*
+    , conduit >=1.0 && <2.0
+    , containers
+    , data-default
+    , directory >=1.1 && <1.4
+    , fast-logger
+    , file-embed
+    , foreign-store
+    , hjsmin >=0.1 && <0.3
+    , http-client-tls ==0.3.*
+    , http-conduit ==2.3.*
+    , lucid
+    , monad-control >=0.3 && <1.1
+    , monad-logger ==0.3.*
+    , mtl
+    , safe
+    , shakespeare
+    , template-haskell
+    , text
+    , time
+    , unordered-containers
+    , vector
+    , wai
+    , wai-extra >=3.0 && <3.2
+    , wai-logger
+    , warp
+    , yaml ==0.11.*
+    , yesod ==1.6.*
+    , yesod-core ==1.6.*
+    , yesod-form >=1.6 && <1.8
+    , yesod-static ==1.6.*
+  default-language: Haskell2010
+  if flag(library-only)
+    buildable: False
