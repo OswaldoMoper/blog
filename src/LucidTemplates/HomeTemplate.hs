@@ -28,6 +28,10 @@ homepageTemplate = do
            , class_ "btn btn-info btn-lg"]
           "Check my projects"
         p_ [] " "
-        a_ [ href_ "https://www.youtube.com/@moperaticos"
+        a_ [ href_ "https://www.youtube.com/@moperatico"
            , class_ "btn btn-info btn-lg"]
-          "Check my YouTube channel"
+          "Math YouTube channel"
+        p_ [] " "
+        a_ [ href_ "https://www.youtube.com/@mopercode"
+           , class_ "btn btn-info btn-lg"]
+          "Coding YouTube channel"
