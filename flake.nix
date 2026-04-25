@@ -51,7 +51,6 @@
               text = ''
                 cd ~/blog
                 touch src/Settings/StaticFiles.hs
-                # ${self.packages.default}/bin/blog
                 blog
               '';
             };
