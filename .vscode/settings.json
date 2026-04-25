@@ -1,0 +1,6 @@
+{
+  "nixEnvSelector.nixFile": "${workspaceFolder}/flake.nix",
+  "nixEnvSelector.useFlakes": true,
+  
+  "haskell.serverExecutablePath": "haskell-language-server",
+}
