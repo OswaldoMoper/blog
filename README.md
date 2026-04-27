@@ -24,7 +24,7 @@ This project is my personal website and a playground for experimenting with clea
 - **Haskell / Yesod**
 - **Lucid** for HTML rendering
 - **Nix flakes** for reproducible dev environments
-- **Haskell.nix** for fully reproducible GHC, Cabal, and toolchain pinning
+- **Haskell flake** for fully reproducible GHC, Cabal, and toolchain pinning
 - **Cabal** for local builds
 - **Bootstrap 5** (via CDN) for styling
 
@@ -69,13 +69,19 @@ This project is my personal website and a playground for experimenting with clea
 
 Be sure that ```approot:"``` line on ```config/settings.yml``` is commented (approot will default to localhost, which we want for a local deployment).
 
-Start a dev shell:
+You can start a dev shell using direnv and nix-direnv. You just need to authorize it by running:
+
+```sh
+direnv allow
+```
+
+Alternatively, you can use:
 
 ```sh
 nix develop
 ```
 
-The dev shell includes cabal, ghcid, haskell-language-server, hlint, and other tools pinned by Haskell.nix.
+The dev shell includes `cabal`, `ghcid`,`haskell-language-server`, `hlint`, and other tools pinned via haskell flake toolchain.
 
 Run the live-reloading development server:
 
