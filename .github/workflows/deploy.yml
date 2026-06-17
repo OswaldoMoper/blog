@@ -22,6 +22,13 @@ jobs:
         with:
           submodules: recursive
 
+      # Enable Pages (and set its source to "GitHub Actions") via the API so no
+      # manual toggle in Settings is needed. The GITHUB_TOKEN already has
+      # pages: write from the permissions block above.
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
       - uses: cachix/install-nix-action@v27
         with:
           extra_nix_config: |
