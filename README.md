@@ -9,7 +9,7 @@ This project is my personal website and a playground for experimenting with clea
 - 📦 Reproducible builds with **Nix flakes**  
 - 🔒 Strongly typed routes and templates  
 - 🎨 Custom layout without Yesod widgets  
-- 🚀 Ready for deployment with Nginx + systemd
+- 🚀 Ready for deployment with Nginx + systemd or GitHubPages
 
 ## 💡 Why Lucid?
 
