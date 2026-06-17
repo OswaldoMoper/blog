@@ -14,7 +14,7 @@
                    }:
     let
       devEnv = ''
-        export YESOD_PORT=3000
+        export YESOD_PORT=3001
         echo "DEV Port: $YESOD_PORT"
       '';
     in
@@ -45,6 +45,14 @@
 
           packages = {
             default = config.haskellProjects.default.outputs.packages.blog.package;
+
+            static-site = pkgs.runCommand "static-site" {
+              nativeBuildInputs = [ self'.packages.default ];
+            } ''
+              mkdir -p "$out"
+              export SITE_OUT="$out"
+              static-gen
+            '';
             blog-wrapper = pkgs.writeShellApplication {
               name = "blog-wrapped";
               runtimeInputs = [ self'.packages.default ];
@@ -73,6 +81,10 @@
             dev = {
               type = "app";
               program = "${self'.packages.blog-dev}/bin/blog-dev";
+            };
+            gen = {
+              type = "app";
+              program = "${self'.packages.default}/bin/static-gen";
             };
           };
           legacyPackages = pkgs;

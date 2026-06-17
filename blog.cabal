@@ -10,6 +10,7 @@ data-files: config/*.yml
           , config/robots.txt
           , config/routes.yesodroutes
           , static/css/*.css
+          , content/pages/*.md
 
 flag dev
   description: Turn on development settings, like auto-reload templates.
@@ -32,6 +33,7 @@ library
       LucidTemplates.DefaultTemplate
       LucidTemplates.HomeTemplate
       Settings
+      StaticGen.StaticLayout
       Settings.StaticFiles
       Types
   other-modules:
@@ -137,3 +139,24 @@ executable blog
   default-language: Haskell2010
   if flag(library-only)
     buildable: False
+
+executable static-gen
+  main-is: Main.hs
+  other-modules:
+      Content
+      Paths_blog
+  hs-source-dirs:
+      gen
+  ghc-options: -Wall -O2
+  build-depends:
+      aeson
+    , base >=4.9.1.0 && <5
+    , blog
+    , bytestring
+    , cmark-gfm
+    , directory >=1.1 && <1.4
+    , filepath
+    , lucid
+    , text
+    , yaml ==0.11.*
+  default-language: Haskell2010
