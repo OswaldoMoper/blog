@@ -7,6 +7,7 @@ module Main (main) where
 
 import           Control.Monad               (forM, forM_)
 import qualified Data.ByteString.Lazy        as BL
+import           Data.List                   (sortOn)
 import           Data.Maybe                  (fromMaybe)
 import           Data.Text                   (Text)
 import qualified Data.Text                   as T
@@ -51,20 +52,19 @@ main = do
   -- $SITE_OUT lets the Nix derivation target $out directly; defaults to ./_site
   -- for local iteration via `nix run .#gen`.
   outDir <- fromMaybe "_site" <$> lookupEnv "SITE_OUT"
+
+  -- Load content first so the navbar can be built from it.
+  docs <- loadContentPages
   let cfg = SiteConfig
         { scOutDir    = outDir
         , scDomain    = "OswaldoMoper.com"
         , scCopyright = "© 2025-2026 Oswaldo Moper."
-        , scNav       =
-            [ NavItem "Home"  "/"
-            , NavItem "About" "/about/"
-            ]
+        , scNav       = buildNav docs
         }
   createDirectoryIfMissing True outDir
 
   writeHtmlFile (outDir </> "index.html") (renderHome cfg)
 
-  docs <- loadContentPages
   forM_ docs $ \doc -> do
     let slug = T.unpack (dmSlug (docMeta doc))
     writeHtmlFile (outDir </> slug </> "index.html") (renderPage cfg doc)
@@ -93,14 +93,33 @@ loadContentPages = do
       let mds = filter ((== ".md") . takeExtension) names
       forM mds $ \name -> do
         raw <- TIO.readFile (dir </> name)
-        case parseDoc raw of
+        case parseDoc name raw of
           Left err  -> die ("Failed to parse " <> name <> ": " <> err)
           Right doc -> pure doc
+
+-- | Build the navbar from three sources under a single ordering: Home (pinned
+-- first), content pages (by numeric filename prefix), and external/off-site
+-- links (NixTalk), which sort last. Pages without a numeric prefix fall after
+-- the numbered ones; external links use 'maxBound' so they always trail.
+buildNav :: [Doc] -> [NavItem]
+buildNav docs =
+  NavItem "Home" "/" : map snd (sortOn fst (pageEntries ++ externalNav))
+  where
+    pageEntries =
+      [ (fromMaybe defaultOrder (dmOrder m), NavItem (dmNavLabel m) ("/" <> dmSlug m <> "/"))
+      | doc <- docs
+      , let m = docMeta doc
+      , dmInNav m
+      ]
+    defaultOrder = 1000 :: Int
+    -- External / off-site links, ordered after every content page.
+    externalNav =
+      [ (maxBound, NavItem "NixTalk" "https://nixtalk.oswaldomoper.com") ]
 
 renderHome :: SiteConfig -> Html ()
 renderHome cfg = staticLayout StaticPage
   { spTitle       = "Oswaldo Moper - Reproducible and functional infrastructure"
-  , spDescription = "Oswaldo Moper — Haskell and Nix engineer. Reproducible, functional infrastructure, deep refactoring and system design."
+  , spDescription = defaultDescription
   , spCssHrefs    = siteCss
   , spNav         = scNav cfg
   , spActiveHref  = Just "/"

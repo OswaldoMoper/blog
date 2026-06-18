@@ -22,6 +22,8 @@ cabal.sandbox.config
 *~
 \#*
 result
+result-*
+_site/
 .env
 /.cache
 /.direnv
